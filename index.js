@@ -1,22 +1,15 @@
-var express = require('express')
-var app = express()
+var http = require('http');
+var fs = require('fs');
 
+var PORT = (process.env.PORT || 8080); 
 
-app.set('port', (process.env.PORT || 8080))
-//app.use(express.static(__dirname + '/public'))
+http.createServer((req, res) => {	
+	var index = fs.readFileSync('public/index.html', 'utf8');
 
-//__dirname returns the directory that the currently executing script is in.
+	res.writeHead(200, {"Content-Type": "text/html"});
+	res.write(index);
+	res.end();
+}).listen(PORT, () => {
+    console.log("Server listening on: http://localhost:%s", PORT);
+});
 
-app.get('/', function(request, response) {
-    response.sendFile('public/index.html',{root:__dirname})
-
-/* sends an entire HTTP response to the client,                                                                                                                                     
- including headers and content,                                                                                                                                                     
- which is why you can only call once*/
-
-
-})
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at :" + app.get('port'))
-})
